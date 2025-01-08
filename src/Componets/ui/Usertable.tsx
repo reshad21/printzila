@@ -9,7 +9,7 @@ const UserTable = () => {
       {/* Table */}
       <table className="min-w-full border-collapse border border-gray-300 text-left">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="">
             <th className="border border-gray-300 px-4 py-2">ID</th>
             <th className="border border-gray-300 px-4 py-2">Name</th>
             <th className="border border-gray-300 px-4 py-2">Email</th>

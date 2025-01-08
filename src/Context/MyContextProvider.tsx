@@ -22,7 +22,7 @@ export const MyContextProvider = ({
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [perPage] = useState<number>(4); // You can change this value based on your preference
+  const [perPage] = useState<number>(5); // You can change this value based on your preference
   const [totalPages, setTotalPages] = useState<number>(1);
 
   // Get data from database
@@ -37,7 +37,11 @@ export const MyContextProvider = ({
         setData(result);
         setTotalPages(Math.ceil(result?.data?.length / perPage)); // Set total pages
       } catch (err) {
-        setError(err.message || "Failed to fetch data");
+        if (err instanceof Error) {
+          setError(err.message); // Narrowed to Error type
+        } else {
+          setError("An unknown error occurred"); // Fallback for non-Error types
+        }
       } finally {
         setLoading(false);
       }

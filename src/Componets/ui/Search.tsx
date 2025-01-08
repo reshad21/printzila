@@ -11,7 +11,7 @@ const Search: React.FC = () => {
         placeholder="Search by name or email"
         value={searchTerm}
         onChange={handleSearch}
-        className="p-2 border border-gray-300 rounded-lg w-[400px]"
+        className="p-2 border border-gray-300 rounded-lg w-[400px] bg-inherit"
       />
     </div>
   );
