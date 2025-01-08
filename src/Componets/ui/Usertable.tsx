@@ -1,41 +1,11 @@
-import React, { useState } from "react";
-import Search from "./Search";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useMyContext } from "../../Context/MyContextProvider";
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  email_verified_at: string | null;
-};
-
-type UserTableProps = {
-  users: User[];
-};
-
-const UserTable: React.FC<UserTableProps> = ({ users }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState(users);
-
-  // Update filtered users whenever searchTerm changes
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.target.value.toLowerCase();
-    setSearchTerm(query);
-
-    const filtered = users.filter(
-      (user) =>
-        user.name.toLowerCase().includes(query) ||
-        user.email.toLowerCase().includes(query)
-    );
-    setFilteredUsers(filtered);
-  };
+const UserTable = () => {
+  const { filteredUsers } = useMyContext();
 
   return (
     <div className="overflow-x-auto">
-      {/* Search input */}
-      <div className="mb-4">
-        <Search searchTerm={searchTerm} onSearchChange={handleSearch} />
-      </div>
-
       {/* Table */}
       <table className="min-w-full border-collapse border border-gray-300 text-left">
         <thead>
@@ -49,7 +19,7 @@ const UserTable: React.FC<UserTableProps> = ({ users }) => {
           </tr>
         </thead>
         <tbody>
-          {filteredUsers.map((user) => (
+          {filteredUsers.map((user: any) => (
             <tr key={user.id} className="hover:bg-gray-50">
               <td className="border border-gray-300 px-4 py-2">{user.id}</td>
               <td className="border border-gray-300 px-4 py-2">{user.name}</td>
