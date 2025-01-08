@@ -1,7 +1,7 @@
 import html2canvas from "html2canvas";
+import { Resizable } from "re-resizable";
 import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
-import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 
 const Tusktwo = () => {
@@ -36,8 +36,8 @@ const Tusktwo = () => {
   const exportFinalImage = async () => {
     if (tShirtRef.current) {
       const canvas = await html2canvas(tShirtRef.current, {
-        useCORS: true, // Ensures CORS-enabled images are handled
-        backgroundColor: null, // Keeps transparent background
+        useCORS: true,
+        backgroundColor: null,
       });
 
       const link = document.createElement("a");
@@ -65,24 +65,27 @@ const Tusktwo = () => {
           backgroundPosition: "center",
         }}
       >
-        {/* Logo Component */}
+        {/* Draggable and Resizable Logo */}
         {logo && (
           <Draggable>
-            <ResizableBox
-              width={100}
-              height={100}
-              lockAspectRatio
-              minConstraints={[50, 50]}
-              maxConstraints={[200, 200]}
-              className="border-2 border-dashed border-gray-400"
+            <Resizable
+              defaultSize={{
+                width: 100,
+                height: 100,
+              }}
+              minWidth={50}
+              minHeight={50}
+              maxWidth={200}
+              maxHeight={200}
+              //   className="border-2 border-dashed border-gray-400"
             >
               <img
                 src={logo}
                 alt="Logo"
                 className="w-full h-full object-contain"
-                style={{ pointerEvents: "none" }}
+                style={{ pointerEvents: "none" }} // Prevents drag/resize interference
               />
-            </ResizableBox>
+            </Resizable>
           </Draggable>
         )}
       </div>
