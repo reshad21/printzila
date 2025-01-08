@@ -1,12 +1,28 @@
 import html2canvas from "html2canvas";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 
 const Tusktwo = () => {
   const [logo, setLogo] = useState<string | null>(null);
+  const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
   const tShirtRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Preload the background image and convert it to a data URL
+    const preloadImage = async () => {
+      const response = await fetch(
+        "https://www.coolclub.gr/images/styles/large/CCB2810147_1.jpg"
+      );
+      const blob = await response.blob();
+      const reader = new FileReader();
+      reader.onloadend = () => setBackgroundImage(reader.result as string);
+      reader.readAsDataURL(blob);
+    };
+
+    preloadImage();
+  }, []);
 
   const handleLogoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -19,23 +35,11 @@ const Tusktwo = () => {
 
   const exportFinalImage = async () => {
     if (tShirtRef.current) {
-      // Clone the t-shirt element and add the background image inline
-      const clone = tShirtRef.current.cloneNode(true) as HTMLElement;
-      const backgroundImage = getComputedStyle(
-        tShirtRef.current
-      ).backgroundImage;
-      clone.style.backgroundImage = backgroundImage;
+      const canvas = await html2canvas(tShirtRef.current, {
+        useCORS: true, // Ensures CORS-enabled images are handled
+        backgroundColor: null, // Keeps transparent background
+      });
 
-      // Append clone to body temporarily
-      document.body.appendChild(clone);
-
-      // Use html2canvas to capture the clone
-      const canvas = await html2canvas(clone);
-
-      // Remove clone from body
-      document.body.removeChild(clone);
-
-      // Download the canvas as an image
       const link = document.createElement("a");
       link.download = "final-tshirt-design.png";
       link.href = canvas.toDataURL();
@@ -55,8 +59,7 @@ const Tusktwo = () => {
         ref={tShirtRef}
         className="relative w-[300px] h-[400px] bg-gray-200 border border-gray-300 shadow-lg"
         style={{
-          backgroundImage:
-            "url(https://www.coolclub.gr/images/styles/large/CCB2810147_1.jpg)",
+          backgroundImage: backgroundImage ? `url(${backgroundImage})` : "none",
           backgroundSize: "contain",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
