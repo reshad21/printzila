@@ -14,7 +14,7 @@ const Pagination = () => {
         <FaChevronLeft />
       </button>
 
-      <span className="font-semibold text-lg">
+      <span className="text-lg">
         {currentPage} of {totalPages}
       </span>
 
